@@ -2,3 +2,6 @@ conda install -c bioconda nextflow #nextflow installation
 conda activate myenv #activation of conda environment
 mv /nfs/home/eraines/data/ /mnt/tank/scratch/eraines/ #example of directory moving
 scp eraines@ctlab.itmo.ru:/nfs/home/eraines/data/fastqc_output_raw/subset_lane1_fastqc.zip ~/Загрузки/ #example of ssh transfer of file
+conda install -c bioconda picard #picard installation
+conda install -c bioconda samtools #samtools installation
+conda install -c bioconda gatk4 #gatk4 installation
