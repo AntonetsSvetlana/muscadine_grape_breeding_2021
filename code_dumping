@@ -5,3 +5,4 @@ scp eraines@ctlab.itmo.ru:/nfs/home/eraines/data/fastqc_output_raw/subset_lane1_
 conda install -c bioconda picard #picard installation
 conda install -c bioconda samtools #samtools installation
 conda install -c bioconda gatk4 #gatk4 installation
+sed 's/^.//' file.txt #delete 1st symbol in line
