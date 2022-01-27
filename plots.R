@@ -34,4 +34,8 @@ ggplot(raines_number_of_reads, aes(y = reads_in_raw_data)) +
   theme(axis.text.x=element_blank())
 
 
-
+ggplot(out, aes(x = F_MISS, y = reorder(INDV, F_MISS)))+
+  geom_bar(stat="summary",color="darkblue", fill="lightblue")+
+  theme_bw() +
+  labs(x = "Level of missing data in samle", y = "Sample", title = "Level of missing data per sample")+
+  theme(text = element_text(size=7))
