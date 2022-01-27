@@ -6,3 +6,5 @@ conda install -c bioconda picard #picard installation
 conda install -c bioconda samtools #samtools installation
 conda install -c bioconda gatk4 #gatk4 installation
 sed 's/^.//' file.txt #delete 1st symbol in line
+sed -i 's/VITMroTrayshed_v2.0.hap1.chr/VITMroTrayshed_v2.0.hap1.chr,/g' cross_2.csvr #example of finding text pattern and replacing it with another
+tr ":" "," < cross.csvr  > cross_2.csvr #replacing sympols
