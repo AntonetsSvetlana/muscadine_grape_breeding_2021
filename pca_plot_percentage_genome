@@ -1,0 +1,64 @@
+library(SNPRelate)
+library(ggplot2)
+library(tidyr)
+library(tidyverse)
+library(dplyr)
+###3_11_population###
+vcf_3_11_new <- snpgdsVCF2GDS("filtered_3_11_excluded.vcf.recode.vcf",
+                              "filtered_3_11_excluded.recode.gds",
+                              method="biallelic.only") #convert to gds format
+genofile_3_11_new <- snpgdsOpen(vcf_3_11_new)
+snpset.id <- read.gdsn(index.gdsn(genofile_3_11_new, "sample.id"))
+pca_3_11 <- snpgdsPCA(genofile_3_11_new, autosome.only = F) #calculate eigenvectors and eigenvalues
+
+#Here's the percent variance explained for each eigenvector
+pc.percent <- pca_3_11$varprop*100
+round(pc.percent, 2)
+
+#get population information
+pop_code <- read.table(file = "3_11_excluded_popmap.csv", header = TRUE, sep = ";")
+sample_id <- pop_code$sample.id
+sample_id
+
+#data frame with results PCA and pop-info
+tab_3_11 <- data.frame(PC1 = pca_3_11$eigenvect[,1],    # the first eigenvector
+                  PC2 = pca_3_11$eigenvect[,2],    # the second eigenvector
+                  stringsAsFactors = FALSE)
+
+Population <- factor(pop_code$pop_code)
+#Add percentage for each component
+percentage <- round(pca_3_11$varprop*100, 2)
+percentage
+
+percentage <- paste(colnames(tab_3_11), "(", paste( as.character(percentage), "%", ")", sep="") )
+percentage
+
+#Plot a PCA image
+x11()
+tab_3_11 %>% ggplot(.,aes(x=PC1,y=PC2)) + 
+  geom_point(aes(color = Population), size=2.5)+ 
+  xlab(percentage[1]) + 
+  ylab(percentage[2])
+
+#male genome percentage calculation
+male3_11<-tab_3_11[1:4,1]
+ending3_11 <- rep(NA, length=37)
+male_3_11 <- append(male3_11,ending3_11)
+female3_11<-tab_3_11[5:8,1]
+female_3_11 <- append(female3_11,ending3_11)
+offspring_3_11<-tab_3_11[9:49,1]
+data_table3_11 <- data.frame(female_3_11, offspring_3_11, male_3_11)
+#boxplot construction
+x11()
+boxplot(data_table3_11, col = c("blue", "red", "green"), main="Boxplots of PC1 values",
+        xlab="PC1", ylab="Family", cex.main=2, cex.lab=1.5, horizontal = TRUE)
+res3_11 <- boxplot(data_table3_11, horizontal = TRUE)
+res3_11$stats[3,] #medians for male parent, female parent and offspring
+med_male3_11 = -0.368554649
+med_female3_11 = 0.329175079
+percantage_3_11 <- rep(NA, length(offspring_3_11))
+#calculate percentage of male genome for each child as (PC1 for child - median of PC1 for male parent)/(distance between median for male and female parents)
+for (n in seq(length(offspring_3_11))){
+  percantage_3_11[n] <- ((offspring_3_11[n]-med_male3_11)/(med_female3_11-med_male3_11))*100
+}
+percantage_3_11
