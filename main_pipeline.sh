@@ -77,19 +77,17 @@ for file in *.sort.trimmed.bam;
 do
 	samtools index /mnt/tank/scratch/eraines/real_data_for_project/aligned/$file
 done
+
 ###Variant calling
 for file in *.sort.trimmed.bam;
 do
 	gatk --java-options "-Xmx7g" HaplotypeCaller -I /mnt/tank/scratch/eraines/real_data_for_project/aligned/$file -R /mnt/tank/scratch/eraines/real_data_for_project/ref_genome/VITMroTrayshed_v2.0_hap1.fasta -ERC GVCF -O /mnt/tank/scratch/eraines/real_data_for_project/snp/"${file%%.*}".g.vcf.gz
 done
+
 ###Apply CombineGVCFs
-for file in snp/*.g.vcf.gz;
-do
-	gatk --java-options "-Xmx7g" CombineGVCFs -R /mnt/tank/scratch/santonec/real_data_for_project/ref_genome/VITMroTrayshed_v2.0_hap1.fasta -V $file
- -O /mnt/tank/scratch/santonec/real_data_for_project/lib1/cohort.g.vcf.gz
+cd snp
+gatk --java-options "-Xmx7g" CombineGVCFs -R /mnt/tank/scratch/santonec/real_data_for_project/ref_genome/VITMroTrayshed_v2.0_hap1.fasta -V 4_11_2_51.g.vcf.gz -V 4_11_2_52.g.vcf.gz ... 
+ -O cohort.g.vcf.gz
 
 ###Apply GenotypeGVCFs
-for file in snp/*.g.vcf.gz;
-do
-	gatk --java-options "-Xmx7g" GenotypeGVCFs  -R /mnt/tank/scratch/santonec/real_data_for_project/ref_genome/VITMroTrayshed_v2.0_hap1.fasta -V /mnt/tank/scratch/santonec/real_data_for_project/lib1/cohort.g.vcf.gz -O /mnt/tank/scratch/santonec/real_data_for_project/lib1/output.vcf.gz
-done
+gatk --java-options "-Xmx7g" GenotypeGVCFs  -R /mnt/tank/scratch/santonec/real_data_for_project/ref_genome/VITMroTrayshed_v2.0_hap1.fasta -V cohort.g.vcf.gz -O output.vcf.gz
