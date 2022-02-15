@@ -34,7 +34,7 @@ multiqc library/fastqc_after_trimming/
 ###Filtering reference file to include only hap1
 cd Ref_genome/
 grep -w 'hap1' VITMroTrayshed_v2.0.fasta > 
-seqtk subseq library/Ref_genome/VITMroTrayshed_v2.0.fasta hap1.lst > /mnt/tank/scratch/santonec/real_data_for_project/ref_genome/VITMroTrayshed_v2.0_hap1.fasta
+seqtk subseq library/Ref_genome/VITMroTrayshed_v2.0.fasta hap1.lst > library/Ref_genome/VITMroTrayshed_v2.0_hap1.fasta
 
 ###GATK SNP calling.
 ###Index Regerence
